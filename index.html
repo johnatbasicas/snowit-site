@@ -868,6 +868,77 @@
             color: var(--color-cyan);
         }
 
+        /* Contact Form */
+        .contact-form {
+            max-width: 600px;
+            margin: 2rem auto 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: var(--color-navy-light);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            color: var(--color-text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-orange);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .contact-form .btn-primary {
+            width: 100%;
+            padding: 1rem 2rem;
+            justify-content: center;
+        }
+
+        .contact-alt {
+            margin-top: 1.5rem;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .contact-alt a {
+            color: var(--color-cyan);
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Footer */
         .footer {
             padding: 4rem;
@@ -1176,15 +1247,33 @@
                     <span>Sarajevo, Bosnia and Herzegovina</span>
                 </div>
             </div>
-            <div class="contact-cta">
-                <a href="mailto:info@snowit.ba" class="btn-primary">
-                    Contact Us
+            <form class="contact-form" id="contactForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company (optional)</label>
+                    <input type="text" id="company" name="company" placeholder="Your company">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required placeholder="Tell us about your project..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                    Send Message
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
-                </a>
-                <a href="careers.html" class="btn-ghost">Join Our Team</a>
-            </div>
+                </button>
+            </form>
+            <p class="contact-alt">Or email us directly at <a href="mailto:info@snowit.ba">info@snowit.ba</a></p>
         </div>
     </section>
 
@@ -1243,6 +1332,35 @@
                 document.body.style.overflow = '';
             });
         });
+
+        // Contact form handler
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const company = document.getElementById('company').value;
+                const message = document.getElementById('message').value;
+
+                const subject = `New inquiry from ${name}${company ? ' (' + company + ')' : ''}`;
+                const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company || 'Not specified'}\n\nMessage:\n${message}`;
+
+                window.location.href = `mailto:info@snowit.ba?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+                // Show success message
+                const btn = contactForm.querySelector('button');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = 'Opening email client...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 3000);
+            });
+        }
     </script>
 </body>
 </html>
